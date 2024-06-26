@@ -1,7 +1,12 @@
 import { useFonts } from "expo-font";
-import { ImageBackground, StyleSheet, Text, View } from "react-native";
+import { Button, ImageBackground, Pressable, StyleSheet, Text, View } from "react-native";
+import Feather from '@expo/vector-icons/Feather';
+import { Link, router } from "expo-router";
 
 export default function Index() {
+  const navigateSearch = () => {
+    router.navigate('/SearchScreen')
+  }
 
   const [loaded] = useFonts({
     DeluxePaintComic: require('../assets/fonts/dpcomic/dpcomic.ttf'),
@@ -23,6 +28,12 @@ export default function Index() {
       >
         <View style={styles.grayScreen}>
           <Text style={styles.textTitle}>Pokedexter</Text>
+        </View>
+        <View style={styles.button}>
+          <Button title="start" onPress={() => router.navigate('/SearchScreen')}></Button>
+          {/* <Pressable style={styles.button} >
+            <Feather name="power" size={50} color="yellow"/>
+          </Pressable> */}
         </View>
       </ImageBackground>
     </View>
@@ -52,5 +63,10 @@ const styles = StyleSheet.create({
   textTitle: {
     fontFamily: 'RexliaFree',
     fontSize: 25
+  },
+  button: {
+    // backgroundColor: 'red',
+    // borderRadius: 50,
+    margin: 100
   }
 });
