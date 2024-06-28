@@ -2,6 +2,7 @@ import { useFonts } from "expo-font";
 import { Button, ImageBackground, Pressable, StyleSheet, Text, View } from "react-native";
 import Feather from '@expo/vector-icons/Feather';
 import { Link, router } from "expo-router";
+import BackgroundPokedex from "@/components/BackgroundPokedex";
 
 export default function Index() {
   const navigateSearch = () => {
@@ -20,23 +21,17 @@ export default function Index() {
   }
 
   return (
-    <View style={styles.container}>
-      <ImageBackground 
-      source={require('../assets/images/pokedex_background.jpg')}
-      style={styles.backgroundImage}
-      resizeMode="stretch"
-      >
+      <BackgroundPokedex>
         <View style={styles.grayScreen}>
           <Text style={styles.textTitle}>Pokedexter</Text>
         </View>
         <View style={styles.button}>
-          <Button title="start" onPress={() => router.navigate('/SearchScreen')}></Button>
+          <Button title="start" onPress={() => router.navigate('/SearchTabs')}></Button>
           {/* <Pressable style={styles.button} >
             <Feather name="power" size={50} color="yellow"/>
           </Pressable> */}
         </View>
-      </ImageBackground>
-    </View>
+      </BackgroundPokedex>
   );
 }
 
