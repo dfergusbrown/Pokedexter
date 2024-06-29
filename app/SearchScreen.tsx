@@ -23,7 +23,7 @@ const SearchScreen = () => {
         if (response.status === 200) {
           setPokedata(response.data.results);
           setFilteredResult(response.data.results)
-          console.log(response.data.results);
+          // console.log(response.data.results);
         }        
       } catch (error) {
         console.error(error)
@@ -43,8 +43,9 @@ const SearchScreen = () => {
   }, [searchTerm])
 
   const renderList: ListRenderItem<Pokemon> = ({ item }) => {
+    const extractedId = item.url.split('/')[6]
     return (
-      <Link href={`/PokemonDetail/?name=${item.name}`} asChild>
+      <Link key={item.url} href={`/PokemonDetail/?name=${item.name}&id=${extractedId}`} asChild>
         <Pressable>
           <View style={styles.listItem}>
             <Text style={styles.listText}>{item.name}</Text>
