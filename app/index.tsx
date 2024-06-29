@@ -26,7 +26,7 @@ export default function Index() {
           <Text style={styles.textTitle}>Pokedexter</Text>
         </View>
         <View style={styles.button}>
-          <Button title="start" onPress={() => router.navigate('/SearchTabs')}></Button>
+          <Button title="start" onPress={() => router.navigate('/SearchScreen')}></Button>
           {/* <Pressable style={styles.button} >
             <Feather name="power" size={50} color="yellow"/>
           </Pressable> */}

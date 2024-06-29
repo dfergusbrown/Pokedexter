@@ -1,5 +1,6 @@
 import BackgroundPokedex from "@/components/BackgroundPokedex";
 import { getAllPokemon } from "@/services/apiService";
+import { Link, router, useNavigation } from "expo-router";
 import { useEffect, useState } from "react";
 import { Text, View, FlatList, ListRenderItem, StyleSheet, Pressable } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
@@ -13,6 +14,7 @@ const SearchScreen = () => {
   const [pokedata, setPokedata] = useState<Pokemon[]>([]);
   const [filteredResult, setFilteredResult] = useState<Pokemon[]>([])
   const [searchTerm, setSearchTerm] = useState('')
+
 
   useEffect(() => {
     async function fetchPokemon() {
@@ -32,9 +34,6 @@ const SearchScreen = () => {
 
   useEffect(() => {
     const filterPokemon = () => {
-      if (!searchTerm) {
-        
-      }
       const filteredData = pokedata.filter(item => {
         return item.name.includes(searchTerm)
       })
@@ -45,11 +44,13 @@ const SearchScreen = () => {
 
   const renderList: ListRenderItem<Pokemon> = ({ item }) => {
     return (
-      <Pressable>
-        <View style={styles.listItem}>
-          <Text style={styles.listText}>{item.name}</Text>
-        </View>
-      </Pressable>
+      <Link href={`/PokemonDetail/?name=${item.name}`} asChild>
+        <Pressable>
+          <View style={styles.listItem}>
+            <Text style={styles.listText}>{item.name}</Text>
+          </View>
+        </Pressable>
+      </Link>
     );
   };
 
@@ -75,7 +76,7 @@ const styles = StyleSheet.create({
   listContainer: {
     flex: 1,
     width: '75%',
-    marginTop: 10,
+    marginVertical: 10,
     marginLeft: -20,
     backgroundColor: 'white',
     borderRadius: 5
