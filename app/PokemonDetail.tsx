@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
   detailContainer: {
     flex: 1,
     width: "75%",
-    marginTop: 140,
+    marginTop: 40,
     marginLeft: -20,
     marginBottom: 20,
     backgroundColor: "white",

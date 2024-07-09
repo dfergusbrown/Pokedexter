@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   inputContainer: {
-    marginTop: 150,
+    marginTop: 30,
     marginLeft: 50,
     width: "100%",
   },

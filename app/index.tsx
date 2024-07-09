@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
   grayScreen: {
     height: '30%',
     width: '60%',
-    marginTop: '45%',
+    marginTop: '25%',
     backgroundColor: 'silver',
     borderWidth: 1,
     borderRadius: 5,
