@@ -64,6 +64,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     backgroundColor: "white",
     borderRadius: 10,
+    borderColor: 'grey'
   },
   sprite: {
     height: 150,

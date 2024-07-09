@@ -8,7 +8,7 @@ export const api = axios.create({
 })
 
 export const getAllPokemon = async () => {
-    return await api.get('/?limit=100')
+    return await api.get('/?limit=1000')
 }
 
 export const getPokemonById = async (id: string) => {
