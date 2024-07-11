@@ -4,6 +4,7 @@ import { RouteProp, useRoute } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
+import * as Speech from 'expo-speech';
 
 type PokemonDetailRouteParams = {
   PokemonDetail: {
@@ -31,6 +32,12 @@ const PokemonDetail = () => {
   const [speciesData, setSpeciesData] = useState<any>();
 
   const [loading, setLoading] = useState(true);
+
+  const readPokemonInfo = () => {
+    if (pokemonData && pokemonData.types) {
+      Speech.speak(`${name}, a ${pokemonData.types[0].type.name} type pokemon.`, {voice: "Samantha"})
+    }
+  }
 
   useEffect(() => {
     const fetchPokemonData = async () => {
@@ -63,7 +70,20 @@ const PokemonDetail = () => {
       setLoading(false)
     }
     fetchAllData()
+
+    const getAllVoices = async () => {
+      const response = await Speech.getAvailableVoicesAsync()
+      const filteredList = response.filter((item) => {
+        return item.language === "en-US"
+      })
+      // console.log(filteredList)
+    }
+    getAllVoices()
   }, []);
+
+  useEffect(() => {
+    readPokemonInfo()
+  }, [pokemonData])
 
   return (
     <BackgroundPokedex>
