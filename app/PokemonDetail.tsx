@@ -2,9 +2,11 @@ import BackgroundPokedex from "@/components/BackgroundPokedex";
 import { getPokemonById, getSpeciesbyId } from "@/services/apiService";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import * as Speech from 'expo-speech';
+import { readPokemonInfo } from "@/utilities/speechToText";
+import { FontAwesome } from '@expo/vector-icons';
 
 type PokemonDetailRouteParams = {
   PokemonDetail: {
@@ -13,15 +15,21 @@ type PokemonDetailRouteParams = {
   };
 };
 
-interface Ability {
+interface BasePair {
   name: string;
   url: string;
 }
 
 interface AbilityEntry {
-  ability: Ability;
+  ability: BasePair;
   is_hidden: boolean;
   slot: number;
+}
+
+interface FlavorTextEntry {
+  flavor_text: string,
+  language: BasePair,
+  version: BasePair
 }
 
 const PokemonDetail = () => {
@@ -32,12 +40,6 @@ const PokemonDetail = () => {
   const [speciesData, setSpeciesData] = useState<any>();
 
   const [loading, setLoading] = useState(true);
-
-  const readPokemonInfo = () => {
-    if (pokemonData && pokemonData.types) {
-      Speech.speak(`${name}, a ${pokemonData.types[0].type.name} type pokemon.`, {voice: "Samantha"})
-    }
-  }
 
   useEffect(() => {
     const fetchPokemonData = async () => {
@@ -70,20 +72,11 @@ const PokemonDetail = () => {
       setLoading(false)
     }
     fetchAllData()
-
-    const getAllVoices = async () => {
-      const response = await Speech.getAvailableVoicesAsync()
-      const filteredList = response.filter((item) => {
-        return item.language === "en-US"
-      })
-      // console.log(filteredList)
-    }
-    getAllVoices()
   }, []);
 
-  useEffect(() => {
-    readPokemonInfo()
-  }, [pokemonData])
+  // useEffect(() => {
+  //   pokemonData && speciesData && readPokemonInfo(speciesData, pokemonData)
+  // }, [pokemonData, speciesData])
 
   return (
     <BackgroundPokedex>
@@ -102,8 +95,15 @@ const PokemonDetail = () => {
               style={styles.sprite}
             />
           </View>
-          <ScrollView>
-            <Text style={{ fontSize: 30, textAlign: "right" }}>{name}</Text>
+          <ScrollView style={{width: '70%'}}>
+            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              <Pressable
+              onPress={() => Speech.stop()}
+              >
+                <FontAwesome name="volume-up" size={24} color="black" />
+              </Pressable>
+              <Text style={{ fontSize: 30, textAlign: "right" }}>{name}</Text>
+            </View>
             <Text>Type: {pokemonData.types[0].type.name}</Text>
             <View>
               <Text>Abilities:{" "}</Text>
