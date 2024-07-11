@@ -58,16 +58,13 @@ const SearchScreen = () => {
           },
           styles.wrapperCustom,
         ]}
+        onPress={() =>
+          router.navigate(`/PokemonDetail/?name=${item.name}&id=${extractedId}`)
+        }
       >
-        <Link
-          key={item.url}
-          href={`/PokemonDetail/?name=${item.name}&id=${extractedId}`}
-          asChild
-        >
-          <View style={styles.listItem}>
-            <Text style={styles.listText}>{item.name}</Text>
-          </View>
-        </Link>
+        <View style={styles.listItem}>
+          <Text style={styles.listText}>{item.name}</Text>
+        </View>
       </Pressable>
     );
   };
