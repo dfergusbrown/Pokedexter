@@ -1,12 +1,13 @@
 import BackgroundPokedex from "@/components/BackgroundPokedex";
 import { getPokemonById, getSpeciesbyId } from "@/services/apiService";
 import { RouteProp, useRoute } from "@react-navigation/native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import * as Speech from 'expo-speech';
+import * as Speech from "expo-speech";
 import { readPokemonInfo } from "@/utilities/speechToText";
-import { FontAwesome } from '@expo/vector-icons';
+import { MaterialIcons } from "@expo/vector-icons";
+import { SpeechContext } from "@/contexts/SpeechContext";
 
 type PokemonDetailRouteParams = {
   PokemonDetail: {
@@ -27,9 +28,9 @@ interface AbilityEntry {
 }
 
 interface FlavorTextEntry {
-  flavor_text: string,
-  language: BasePair,
-  version: BasePair
+  flavor_text: string;
+  language: BasePair;
+  version: BasePair;
 }
 
 const PokemonDetail = () => {
@@ -41,13 +42,16 @@ const PokemonDetail = () => {
 
   const [loading, setLoading] = useState(true);
 
+  const context = useContext(SpeechContext);
+  const { ttsEnabled, toggleTts } = context;
+
   useEffect(() => {
     const fetchPokemonData = async () => {
       try {
         const response = await getPokemonById(id);
         if (response.status === 200) {
-          // console.log(response.data);
-          return response.data
+          console.log(response.data);
+          return response.data;
         }
       } catch (error) {
         console.error(error);
@@ -55,28 +59,30 @@ const PokemonDetail = () => {
     };
     const fetchSpeciesData = async () => {
       try {
-        const response = await getSpeciesbyId(id)
+        const response = await getSpeciesbyId(id);
         if (response.status === 200) {
-          console.log(response.data)
-          return response.data
+          // console.log(response.data)
+          return response.data;
         }
       } catch (error) {
-        console.error(error)
+        console.error(error);
       }
-    }
+    };
     const fetchAllData = async () => {
-      const pokemonResponse = await fetchPokemonData()
-      const speciesResponse = await fetchSpeciesData()
-      setPokemonData(pokemonResponse)
-      setSpeciesData(speciesResponse)
-      setLoading(false)
-    }
-    fetchAllData()
+      const pokemonResponse = await fetchPokemonData();
+      const speciesResponse = await fetchSpeciesData();
+      setPokemonData(pokemonResponse);
+      setSpeciesData(speciesResponse);
+      setLoading(false);
+    };
+    fetchAllData();
   }, []);
 
-  // useEffect(() => {
-  //   pokemonData && speciesData && readPokemonInfo(speciesData, pokemonData)
-  // }, [pokemonData, speciesData])
+  useEffect(() => {
+    if (pokemonData && speciesData && ttsEnabled) {
+      readPokemonInfo(speciesData, pokemonData);
+    }
+  }, [pokemonData, speciesData]);
 
   return (
     <BackgroundPokedex>
@@ -95,18 +101,23 @@ const PokemonDetail = () => {
               style={styles.sprite}
             />
           </View>
-          <ScrollView style={{width: '70%'}}>
-            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <ScrollView style={{ width: "70%" }}>
+            <View
+              style={{ flexDirection: "row", justifyContent: "space-between" }}
+            >
               <Pressable
-              onPress={() => Speech.stop()}
+                onPress={() => {
+                  ttsEnabled ? Speech.stop() : readPokemonInfo(speciesData, pokemonData);
+                  toggleTts();
+                }}
               >
-                <FontAwesome name="volume-up" size={24} color="black" />
+                <MaterialIcons name={ttsEnabled ? "volume-up" : "volume-off"} size={24} color="black" />
               </Pressable>
               <Text style={{ fontSize: 30, textAlign: "right" }}>{name}</Text>
             </View>
             <Text>Type: {pokemonData.types[0].type.name}</Text>
             <View>
-              <Text>Abilities:{" "}</Text>
+              <Text>Abilities: </Text>
               {pokemonData.abilities.map((entry: AbilityEntry, idx: number) => (
                 <Text key={idx}>{entry.ability.name}</Text>
               ))}
